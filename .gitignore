@@ -1,2 +1,12 @@
-*.mp4
-*.mov
+# ignore raw video files
+**/*.mp4
+**/*.mov
+
+# ignoring build configuration
+Boon.toml
+
+# ignoring release folder
+release/
+
+# ignoring editor configuration files
+.vscode/

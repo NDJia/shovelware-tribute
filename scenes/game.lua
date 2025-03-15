@@ -10,17 +10,32 @@ roadSideLeft = math.pi - math.pi/3.41
 
 function scene.load()
 local b = Building:new(vanishing.x + 250, vanishing.y, 0, roadSideRight)
-local b2 = Building:new(vanishing.x - 350, vanishing.y, 0, math.pi - roadSideRight)
+local b2 = Building:new(vanishing.x - 350, vanishing.y, 0, roadSideLeft)
 decor = {b, b2}
+
+local obstacle1 = Obstacle:new(vanishing.x + 100, vanishing.y, 0, roadSideRight, 0)
+local obstacle2 = Obstacle:new(vanishing.x - 250, vanishing.y, 0, roadSideLeft, 2)
+enemies = {obstacle1, obstacle2}
 end
 
 function scene.update(dt)
-  for _, thing in pairs(decor) do
+  for i, thing in pairs(decor) do
    thing:update() 
   end
   
-  for _, e in pairs(enemies) do
-   e:update() 
+  for i, e in pairs(enemies) do
+   e:update() -- updates positioning/states of object
+   -- check if object is colliding with player:
+   -- it is true if object is at or above a certain y position, and it has the same lane as the player
+   local _, enemyY = polarToPixel(e.centreX, e.centreY, e.r, e.angle)
+   
+   if enemyY > 800 and e.lane == player.lane then
+     player.health = player.health - 1
+     removeObstacle(i)
+   end
+   
+   if enemyY > 1000 then removeObstacle(i) end
+   
   end
   
 --  b:update()
@@ -38,6 +53,9 @@ function scene.draw()
   for _, e in pairs(enemies) do
    e:draw() 
   end
+  
+  love.graphics.print(tostring(player.health), 10, 10)
+  love.graphics.print(tostring(player.lane), 10, 30)
 end
 
 
@@ -70,6 +88,7 @@ end
 function love.keypressed(key, scancode, isrepeat)
   if key == "right" and vanishing.x > width/2 - 500 then
     vanishing.x = vanishing.x - 500
+    player.lane = player.lane + 1
     
     for _, thing in pairs(decor) do
      changeCentreX(thing, -500)
@@ -80,6 +99,7 @@ function love.keypressed(key, scancode, isrepeat)
     end
   elseif key == "left" and vanishing.x < width/2 + 500 then
     vanishing.x = vanishing.x + 500
+    player.lane = player.lane -1
     
     for _, thing in pairs(decor) do
      changeCentreX(thing, 500)
