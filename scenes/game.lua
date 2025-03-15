@@ -9,11 +9,11 @@ roadSideLeft = math.pi - math.pi/3.41
 
 
 -- set speed movement
-speed = 3
+speed = 1
 -- set lines
 line_width = 20
 line_height = 80
-line_space = 80
+line_space = 40
 line_start = vanishing.y - line_height
 
 function scene.load()
@@ -45,7 +45,7 @@ function scene.update(dt)
    if enemyY > 1000 then removeObstacle(i) end
    
   end
-  if line_start <= vanishing.y then
+  if line_start <= vanishing.y + line_space then
     line_start = line_start + speed
   else
     line_start = vanishing.y - line_height
@@ -94,13 +94,20 @@ function drawBackground()
   love.graphics.polygon("fill", roadPoints)
   -- lines draw the first line if need, then draw the rest
   love.graphics.setColor(1,1,1,1)
-  if line_start <= vanishing.y then
-    love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y, line_width, line_height - vanishing.y + line_start)
+
+  index = line_start
+
+  if index <= vanishing.y then
+    love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y, line_width, line_height - vanishing.y + index)
+  elseif index <= vanishing.y + line_space then
+    love.graphics.rectangle("fill", vanishing.x - line_width/2, index, line_width, line_height)
   end
+  index = index - line_height * 2 - 10
+
   repeat
-  love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y + line_start, line_width, line_height)
-  line_start  = line_start + line_height + line_space
-  until line_start >= height
+  love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y + index, line_width, line_height)
+  index  = index + line_height + line_space
+  until index >= height
   love.graphics.pop("all")
 end
 
@@ -128,6 +135,8 @@ function love.keypressed(key, scancode, isrepeat)
     for _, e in pairs(enemies) do
      changeCentreX(e, 500)
     end
+
+
   end
 end
 
