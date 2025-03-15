@@ -22,7 +22,7 @@ function scene.draw()
   -- draw UI boxes
   love.graphics.push("all")
   
-  love.graphics.pop("pop")
+  love.graphics.pop("all")
 end
 
 

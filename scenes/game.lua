@@ -70,6 +70,9 @@ function scene.draw()
   
   love.graphics.print(tostring(player.health), 10, 10)
   love.graphics.print(tostring(player.lane), 10, 30)
+  
+  -- draw truck console
+  drawTruckConsole()
 end
 
 
@@ -107,9 +110,10 @@ function drawBackground()
   index = index - line_height * 2 - 10
 
   repeat
-  love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y + index, line_width, line_height)
-  index  = index + line_height + line_space
+    love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y + index, line_width, line_height)
+    index  = index + line_height + line_space
   until index >= height
+  
   love.graphics.pop("all")
 end
 
@@ -138,6 +142,11 @@ function love.keypressed(key, scancode, isrepeat)
      changeCentreX(e, 500)
     end
   end
+end
+
+
+function drawTruckConsole()
+  
 end
 
 
