@@ -75,7 +75,7 @@ function drawBackground()
   }
   love.graphics.polygon("fill", roadPoints)
   -- lines draw the first line if need, then draw the rest
-  live.graphics.setcolor(1,1,1,1)
+  love.graphics.setColor(1,1,1,1)
   if line_start <= vanishing.y then
     love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y, line_width, line_height - vanishing.y + line_start)
   end
