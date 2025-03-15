@@ -9,6 +9,9 @@ decor = {}
 -- building class
 Building = {}
 
+-- Set speed of movement
+speed = 3
+
 function Building:new(x, y, dist, setAngle)
   newObj = {
     centreX = x,
@@ -24,7 +27,7 @@ end
 
 
 function Building:update()
-  self.r = self.r + 3
+  self.r = self.r + speed
 end
 
 function Building:draw()
@@ -32,3 +35,8 @@ function Building:draw()
   love.graphics.rectangle("fill", x, y, 100, 100)
   
 end
+
+function changeCentreX(obj, rateChange)
+  obj.centreX = obj.centreX + rateChange
+end
+

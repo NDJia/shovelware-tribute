@@ -32,7 +32,7 @@ function scene.draw()
   end
   
   for _, e in pairs(enemies) do
-   e:update() 
+   e:draw() 
   end
 end
 
@@ -52,14 +52,40 @@ function drawBackground()
   -- road
   love.graphics.setColor(0.502, 0.322, 0.098, 1)
   local roadPoints = {
-    vanishing.x - 200, vanishing.y,
-    vanishing.x + 200, vanishing.y,
-    vanishing.x + 800, height,
-    vanishing.x - 800, height
+    vanishing.x - 350, vanishing.y,
+    vanishing.x + 350, vanishing.y,
+    vanishing.x + 950, height,
+    vanishing.x - 950, height
   }
   love.graphics.polygon("fill", roadPoints)
   
   love.graphics.pop("all")
 end
+
+-- input
+function love.keypressed(key, scancode, isrepeat)
+  if key == "right" then
+    vanishing.x = vanishing.x - 100
+    
+    for _, thing in pairs(decor) do
+     changeCentreX(thing, -100)
+    end
+    
+    for _, e in pairs(enemies) do
+     changeCentreX(e, -100)
+    end
+  elseif key == "left" then
+    vanishing.x = vanishing.x + 100
+    
+    for _, thing in pairs(decor) do
+     changeCentreX(thing, 100)
+    end
+    
+    for _, e in pairs(enemies) do
+     changeCentreX(e, 100)
+    end
+  end
+end
+
 
 return scene

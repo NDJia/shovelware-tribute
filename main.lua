@@ -6,6 +6,8 @@
     - each scene must be in its own file
       - check StackingSceneMgr.lua documentation for more information: https://gitlab.com/V3X3D/love-libs/-/tree/master/StackingSceneMgr
     - use Building class in obstacles.lua as guideline for OOP
+    
+    - main.lua should be used for game state control, logic should go in relevant scene files
 --]]
 
 --function love.load()
@@ -26,7 +28,8 @@ require "obstacles"
 require "player"
 
 -- state tracking
-state = "menu" -- values: menu, game, end, pause
+state = "menu"
+-- values: menu, game, turn (for cutscene), pause, end
 
 function love.load()
   width, height = love.graphics.getDimensions()
