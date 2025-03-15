@@ -1,6 +1,7 @@
 function love.conf(t)
     t.window.width = 1920
     t.window.height = 1080
+    t.version = "11.5"
     t.window.title = "York Truck Simulator"
     
     -- disable unnecessary modules
