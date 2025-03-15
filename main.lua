@@ -35,7 +35,7 @@ function love.load()
   width, height = love.graphics.getDimensions()
   
   -- SSM.add("game")
-  SSM.add("game")
+  SSM.add("mainmenu")
 end
 
 function love.update(dt)

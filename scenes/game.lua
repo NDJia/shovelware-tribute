@@ -70,7 +70,7 @@ function scene.draw()
   love.graphics.print(tostring(player.lane), 10, 30)
   
   -- draw truck console
-  drawTruckConsole()
+  player:draw()
 end
 
 
@@ -145,9 +145,6 @@ function love.keypressed(key, scancode, isrepeat)
 end
 
 
-function drawTruckConsole()
-  
-end
 
 
 return scene
