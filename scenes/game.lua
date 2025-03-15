@@ -4,8 +4,8 @@ local scene = {}
 local vanishing = {x = width/2, y = 300}
 
 -- constant angles; use these angles for objects moving from the right or left
-local roadSideRight = math.pi/3.41
-local roadSideLeft = math.pi - math.pi/3.41
+roadSideRight = math.pi/3.41
+roadSideLeft = math.pi - math.pi/3.41
 
 
 function scene.load()
