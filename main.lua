@@ -25,10 +25,13 @@ SSM.setPath("scenes/")
 require "obstacles"
 require "player"
 
+-- state tracking
+state = "menu" -- values: menu, game, end, pause
+
 function love.load()
   width, height = love.graphics.getDimensions()
   
-  SSM.add("testscene")
+  SSM.add("game")
 end
 
 function love.update(dt)
