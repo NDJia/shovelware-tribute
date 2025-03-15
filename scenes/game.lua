@@ -8,6 +8,14 @@ roadSideRight = math.pi/3.41
 roadSideLeft = math.pi - math.pi/3.41
 
 
+-- set speed movement
+speed = 3
+-- set lines
+line_width = 20
+line_height = 80
+line_space = 80
+line_start = vanishing.y - line_height
+
 function scene.load()
 local b = Building:new(vanishing.x + 250, vanishing.y, 0, roadSideRight)
 local b2 = Building:new(vanishing.x - 350, vanishing.y, 0, roadSideLeft)
@@ -37,7 +45,11 @@ function scene.update(dt)
    if enemyY > 1000 then removeObstacle(i) end
    
   end
-  
+  if line_start <= vanishing.y then
+    line_start = line_start + speed
+  else
+    line_start = vanishing.y - line_height
+  end
 --  b:update()
 end
 
@@ -80,7 +92,15 @@ function drawBackground()
     vanishing.x - 950, height
   }
   love.graphics.polygon("fill", roadPoints)
-  
+  -- lines draw the first line if need, then draw the rest
+  love.graphics.setColor(1,1,1,1)
+  if line_start <= vanishing.y then
+    love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y, line_width, line_height - vanishing.y + line_start)
+  end
+  repeat
+  love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y + line_start, line_width, line_height)
+  line_start  = line_start + line_height + line_space
+  until line_start >= height
   love.graphics.pop("all")
 end
 

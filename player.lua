@@ -5,9 +5,9 @@ player = {
   lane = 1
 }
 
-function player:update()
+--function player:update()
   
-end
+--end
 
 
 function player:draw()
