@@ -9,7 +9,9 @@ roadSideLeft = math.pi - math.pi/3.41
 
 
 -- set speed movement
-speed = 1
+MAX_SPEED = 3
+DEFAULT_SPEED = 1
+speed = DEFAULT_SPEED
 -- set lines
 line_width = 20
 line_height = 80
@@ -135,8 +137,6 @@ function love.keypressed(key, scancode, isrepeat)
     for _, e in pairs(enemies) do
      changeCentreX(e, 500)
     end
-
-
   end
 end
 
