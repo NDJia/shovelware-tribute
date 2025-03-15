@@ -1,8 +1,12 @@
 local scene = {}
+
+-- define the vanishing point, game objects are defined relative to these coordinates
 local vanishing = {x = width/2, y = 300}
 
-local roadSideRight = math.pi/3.41
-local roadSideLeft = math.pi - math.pi/3.41
+-- constant angles; use these angles for objects moving from the right or left
+roadSideRight = math.pi/3.41
+roadSideLeft = math.pi - math.pi/3.41
+
 
 -- set speed movement
 speed = 3
@@ -84,25 +88,25 @@ end
 
 -- input
 function love.keypressed(key, scancode, isrepeat)
-  if key == "right" then
-    vanishing.x = vanishing.x - 100
+  if key == "right" and vanishing.x > width/2 - 500 then
+    vanishing.x = vanishing.x - 500
     
     for _, thing in pairs(decor) do
-     changeCentreX(thing, -100)
+     changeCentreX(thing, -500)
     end
     
     for _, e in pairs(enemies) do
-     changeCentreX(e, -100)
+     changeCentreX(e, -500)
     end
-  elseif key == "left" then
-    vanishing.x = vanishing.x + 100
+  elseif key == "left" and vanishing.x < width/2 + 500 then
+    vanishing.x = vanishing.x + 500
     
     for _, thing in pairs(decor) do
-     changeCentreX(thing, 100)
+     changeCentreX(thing, 500)
     end
     
     for _, e in pairs(enemies) do
-     changeCentreX(e, 100)
+     changeCentreX(e, 500)
     end
   end
 end

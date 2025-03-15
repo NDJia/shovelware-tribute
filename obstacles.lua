@@ -1,17 +1,19 @@
 -- list of enemies here
--- things in enemies check for collision
+-- things in enemies check for collision, must have collision data or there will be errors
 enemies = {}
 
 -- list decor here
 -- decor does not check for collision, use for things outside the player bounds
 decor = {}
 
--- building class
-Building = {}
-
 -- Set speed of movement
 speed = 3
 
+-- OBSTACLE OBJECTS
+
+-- DECOR OBJECTS
+-- building class
+Building = {}
 function Building:new(x, y, dist, setAngle)
   newObj = {
     centreX = x,

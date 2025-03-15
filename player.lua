@@ -1,5 +1,6 @@
 player = {
-  health = 3
+  health = 3,
+  lane = 0
 }
 
 function player:update()
