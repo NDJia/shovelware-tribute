@@ -26,7 +26,7 @@ function scene.update(dt)
   for _, e in pairs(enemies) do
    e:update() 
   end
-  if line_start <= line_height + line_space then
+  if line_start <= vanishing.y then
     line_start = line_start + speed
   else
     line_start = vanishing.y - line_height
@@ -70,7 +70,7 @@ function drawBackground()
     vanishing.x - 950, height
   }
   love.graphics.polygon("fill", roadPoints)
-  -- lines
+  -- lines draw the first line if need, then draw the rest
   live.graphics.setcolor(1,1,1,1)
   if line_start <= vanishing.y then
     love.graphics.rectangle("fill", vanishing.x - line_width/2, vanishing.y, line_width, line_height - vanishing.y + line_start)
