@@ -1,5 +1,4 @@
 local scene = {}
-
 -- define the vanishing point, game objects are defined relative to these coordinates
 local vanishing = {x = width/2, y = 300}
 
@@ -12,6 +11,9 @@ roadSideLeft = math.pi - math.pi/3.41
 MAX_SPEED = 3
 DEFAULT_SPEED = 1
 speed = DEFAULT_SPEED
+wheel_angle = 0
+turningDirection = 0 -- -1 for left and 1 for right
+turnBack = false
 -- set lines
 line_width = 20
 line_height = 80
@@ -52,6 +54,23 @@ function scene.update(dt)
   else
     line_start = vanishing.y - line_height
   end
+
+  -- turn left or right of the wheel
+  if not turningDirection == 0 then
+    if not turnBack then
+      angle = angle + turningDirection
+      if angle * turningDirection >= 45 then 
+      turnBack = true
+      end
+    else
+      angle = angle - turningDirection
+      if angle * turningDirection <= 0 then
+        angle = 0
+        turnBack = false
+        turningDirection = 0
+      end
+    end
+  end
 --  b:update()
 end
 
@@ -72,7 +91,7 @@ function scene.draw()
   love.graphics.print(tostring(player.lane), 10, 30)
   
   -- draw truck console
-  drawTruckConsole()
+  player:draw(wheel_angle)
 end
 
 
@@ -130,6 +149,7 @@ function love.keypressed(key, scancode, isrepeat)
     for _, e in pairs(enemies) do
      changeCentreX(e, -500)
     end
+    turningDirection = 1
   elseif key == "left" and vanishing.x < width/2 + 500 then
     vanishing.x = vanishing.x + 500
     player.lane = player.lane -1
@@ -141,9 +161,12 @@ function love.keypressed(key, scancode, isrepeat)
     for _, e in pairs(enemies) do
      changeCentreX(e, 500)
     end
+    turningDirection = -1
   end
 end
-
+function scene:getAngle()
+  return wheel_angle
+  end
 
 function drawTruckConsole()
   
