@@ -56,16 +56,16 @@ function scene.update(dt)
   end
 
   -- turn left or right of the wheel
-  if not turningDirection == 0 then
+  if not turningDirection ~= 0 then
     if not turnBack then
-      angle = angle + turningDirection
-      if angle * turningDirection >= 45 then 
+      wheel_angle = wheel_angle + turningDirection
+      if wheel_angle * turningDirection >= 45 then 
       turnBack = true
       end
     else
-      angle = angle - turningDirection
-      if angle * turningDirection <= 0 then
-        angle = 0
+      wheel_angle = wheel_angle - turningDirection
+      if wheel_angle * turningDirection <= 0 then
+        wheel_angle = 0
         turnBack = false
         turningDirection = 0
       end
@@ -164,13 +164,7 @@ function love.keypressed(key, scancode, isrepeat)
     turningDirection = -1
   end
 end
-function scene:getAngle()
-  return wheel_angle
-  end
-
 function drawTruckConsole()
   
 end
-
-
 return scene
