@@ -1,10 +1,8 @@
 local scene = {}
 
--- count the amount of time the player is in the scene
-local secondsPassed = 0
-
--- count the score (number of cartridges picked up)
--- local score = 0
+-- DONT MODIFY THIS VALUE
+-- SET TO FALSE BEFORE MAKING BUILD
+local debugmode = true
 
 -- define the vanishing point, game objects are defined relative to these coordinates
 local vanishing = {x = width/2, y = 300}
@@ -204,5 +202,25 @@ function updateGameAudio()
   end
   
 end
+
+function love.keypressed(key, scancode, isrepeat)
+    -- this functionality only works when debugmode is set to true
+    if debugmode then
+      -- instantly trigger sharp turn screen
+      if key == 'r' then 
+        SSM.add("turnCutscene")
+        SSM.modify("turnCutscene", { flip = true })
+        SSM.setFrozen("game", true)
+      end
+      
+      -- instantly trigger game over screen
+      if key == 'o' then
+        SSM.add("end")
+        SSM.purge("game")
+      end
+    end
+    
+end
+
 
 return scene

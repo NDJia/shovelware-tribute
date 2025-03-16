@@ -50,8 +50,8 @@ function love.load()
   end
   
   
-  -- SSM.add("game")
-  SSM.add("end")
+  SSM.add("game")
+  -- SSM.add("mainmenu")
 end
 
 function love.update(dt)

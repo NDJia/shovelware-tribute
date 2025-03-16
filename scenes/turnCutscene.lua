@@ -1,6 +1,12 @@
 local scene = {}
 local timer = 0
 
+local scale = 0.7
+
+function scene.modify(flags)
+  if flags.flip == true then scale = -0.7 end
+end
+
 function scene.load()
   video = love.graphics.newVideo("assets/turn.ogv")
   img = nil
@@ -20,8 +26,9 @@ end
 
 function scene.draw()
   love.graphics.draw(video, 0, 0)
-  if timer > 1 then love.graphics.draw(img, 100, 100) end
+  if timer > 1 then love.graphics.draw(img, 100, 100, 0, scale, 0.7) end
 end
+
 
 
 
