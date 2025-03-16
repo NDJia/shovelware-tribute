@@ -10,6 +10,10 @@ function scene.load()
   video:play()
   
   logo = love.graphics.newImage("assets/truck_logo.png")
+  
+  -- audio
+  titlesfx:setLooping(true)
+  titlesfx:play()
 end
 
 function scene.update(dt)
@@ -77,6 +81,7 @@ function love.keypressed(key, scancode, isrepeat)
   if drawCredits then drawCredits = false
   elseif key == "return" then
     if cursorSelect <= 0 then
+      love.audio.stop()
       SSM.add("game")
       SSM.purge("mainmenu")
     elseif cursorSelect == 1 then

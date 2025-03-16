@@ -20,6 +20,9 @@ local turnStartTime = 0 -- record the time that the turn started at
 local TIME_FROM_TURN = 5 -- number of seconds the player has to make the turn
 local NUM_BTN_PRESSES = 15 -- number of button presses that must be recorded
 
+-- flag for which audio is playing
+local audioPlaying = 0 -- 0 for bgm, 1-4 for sfx
+
 -- set speed movement
 MAX_SPEED = 3
 DEFAULT_SPEED = 1
@@ -34,13 +37,16 @@ line_space = 40
 line_start = vanishing.y - line_height
 
 function scene.load()
-local b = Building:new(vanishing.x + 250, vanishing.y, 0, roadSideRight)
-local b2 = Building:new(vanishing.x - 350, vanishing.y, 0, roadSideLeft)
-decor = {b, b2}
+  local b = Building:new(vanishing.x + 250, vanishing.y, 0, roadSideRight)
+  local b2 = Building:new(vanishing.x - 350, vanishing.y, 0, roadSideLeft)
+  decor = {b, b2}
 
-local obstacle1 = Obstacle:new(vanishing.x + 100, vanishing.y, 0, roadSideRight, 0)
-local obstacle2 = Obstacle:new(vanishing.x - 250, vanishing.y, 0, roadSideLeft, 2)
-enemies = {obstacle1, obstacle2}
+  local obstacle1 = Obstacle:new(vanishing.x + 100, vanishing.y, 0, roadSideRight, 0)
+  local obstacle2 = Obstacle:new(vanishing.x - 250, vanishing.y, 0, roadSideLeft, 2)
+  enemies = {obstacle1, obstacle2}
+  
+  gamebgm:play()
+  gamebgm:setVolume(0.6)
 end
 
 function scene.update(dt)
@@ -196,12 +202,23 @@ end
 
 
 function updateGameAudio()
-  if love.audio.getActiveSourceCount() < 0 then
+  if audioPlaying == 0 and not gamebgm:isPlaying() then
     local choose = math.floor(love.math.random(4))
+    audioPlaying = choose
     radiovoice[choose]:play()
+  
+  elseif audioPlaying ~= 0 and love.audio.getActiveSourceCount() < 1 then
+    audioPlaying = 0
+    gamebgm:play()
+    gamebgm:seek(love.math.random(20), "seconds")
   end
   
+  
 end
+
+function queueRadioVoice(choose)
+end
+
 
 function love.keypressed(key, scancode, isrepeat)
     -- this functionality only works when debugmode is set to true
@@ -209,7 +226,6 @@ function love.keypressed(key, scancode, isrepeat)
       -- instantly trigger sharp turn screen
       if key == 'r' then 
         SSM.add("turnCutscene")
-        SSM.modify("turnCutscene", { flip = true })
         SSM.setFrozen("game", true)
       end
       
