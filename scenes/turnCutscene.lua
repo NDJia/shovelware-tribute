@@ -1,10 +1,11 @@
 local scene = {}
-local timer = 0
+cutsceneTimer = 0
 
 function scene.load()
   video = love.graphics.newVideo("assets/turn.ogv")
   img = nil
   local choose = math.floor(love.math.random(3))
+  --local choose = 2
   
   if choose == 1 then img = love.graphics.newImage("assets/truck_amazing.png")
   elseif choose == 2 then img = love.graphics.newImage("assets/truck_fedexcellent.png")
@@ -15,13 +16,19 @@ function scene.load()
 end
 
 function scene.update(dt)
-  if timer <= 2 then timer = timer + dt end
+  sceneTimer = sceneTimer + dt
+  if sceneTimer > 5 then
+    SSM.setFrozen("game", false)
+  end
+  
 end
 
 function scene.draw()
   love.graphics.draw(video, 0, 0)
-  if timer > 1 then love.graphics.draw(img, 100, 100) end
+  
+  if sceneTimer > 1 then love.graphics.draw(img, 100, 100, 0, 0.7, 0.7) end
 end
+
 
 
 

@@ -64,8 +64,12 @@ function love.load()
   end
   
   
+  -- images
+  amazing = love.graphics.newImage("assets/truck_amazing.png")
+  fedexcellent = love.graphics.newImage("assets/truck_fedexcellent.png")
+  urock = love.graphics.newImage("assets/truck_urock.png")
   -- SSM.add("game")
-  SSM.add("game")
+  SSM.add("mainmenu")
 end
 
 function love.update(dt)

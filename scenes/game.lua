@@ -1,10 +1,8 @@
 local scene = {}
 
--- count the amount of time the player is in the scene
-local secondsPassed = 0
-
--- count the score (number of cartridges picked up)
--- local score = 0
+-- DONT MODIFY THIS VALUE
+-- SET TO FALSE BEFORE MAKING BUILD
+local debugmode = true
 
 -- define the vanishing point, game objects are defined relative to these coordinates
 local vanishing = {x = width/2, y = 300}
@@ -19,9 +17,15 @@ local sharpTurnAhead = false
 local buttonPressesCount = 0
 local sharpTurnDir = 0 -- left is -1, right is 1
 local turnStartTime = 0 -- record the time that the turn started at
+
+local drawCutscene = false
+local cutsceneTimer = 0
 -- constants
-local TIME_FROM_TURN = 5 -- number of seconds the player has to make the turn
+local TIME_FOR_TURN = 5 -- number of seconds the player has to make the turn
 local NUM_BTN_PRESSES = 15 -- number of button presses that must be recorded
+
+-- flag for which audio is playing
+local audioPlaying = 0 -- 0 for bgm, 1-4 for sfx
 
 -- set speed movement
 MAX_SPEED = 3
@@ -39,13 +43,18 @@ line_start = vanishing.y - line_height
 spawnChance = 9
 gameTime = 0
 function scene.load()
-local b = Building:new(vanishing.x + 250, vanishing.y, 0, roadSideRight)
-local b2 = Building:new(vanishing.x - 350, vanishing.y, 0, roadSideLeft)
-decor = {b, b2}
+  local b = Building:new(vanishing.x + 250, vanishing.y, 0, roadSideRight)
+  local b2 = Building:new(vanishing.x - 350, vanishing.y, 0, roadSideLeft)
+  decor = {b, b2}
 
-local obstacle1 = Obstacle:new(vanishing.x + 100, vanishing.y, 0, roadSideRight, 0)
-local obstacle2 = Obstacle:new(vanishing.x - 250, vanishing.y, 0, roadSideLeft, 2)
-enemies = {obstacle1, obstacle2}
+  local obstacle1 = Obstacle:new(vanishing.x + 100, vanishing.y, 0, roadSideRight, 0)
+  local obstacle2 = Obstacle:new(vanishing.x - 250, vanishing.y, 0, roadSideLeft, 2)
+  enemies = {obstacle1, obstacle2}
+  
+  gamebgm:play()
+  gamebgm:setVolume(0.6)
+  
+  video = love.graphics.newVideo("assets/turn.ogv")
 end
 
 function spawnObs()
@@ -71,6 +80,8 @@ function scene.update(dt)
   end
 
   updateGameAudio()
+  -- add to player timer
+  player.time = player.time + dt
   
   for i, thing in pairs(decor) do
    thing:update() 
@@ -111,7 +122,9 @@ function scene.update(dt)
       end
     end
   end
---  b:update()
+
+  if drawCutscene then updateCutsceneVideo(dt) end
+
 end
 
 function scene.draw()
@@ -133,6 +146,8 @@ function scene.draw()
   -- draw truck console
   
   player:draw(wheel_angle)
+  
+  if drawCutscene then playCutsceneVideo() end
 end
 
 
@@ -179,10 +194,13 @@ end
 
 -- input
 function love.keypressed(key, scancode, isrepeat)
-  if not sharpTurnAhead then changeLane(key) end
-  
+  if not sharpTurnAhead then changeLane(key)
+  else sharpTurn(key)
+  end
+
 end
 
+-- called in input function above to handle lane changing
 function changeLane(key)
   if key == "right" and vanishing.x > width/2 - 500 then
     vanishing.x = vanishing.x - 500
@@ -218,15 +236,57 @@ function sharpTurn(key)
   
 end
 
-
-
-
-function updateGameAudio()
-  if love.audio.getActiveSourceCount() < 0 then
-    local choose = math.floor(love.math.random(4))
-    radiovoice[choose]:play()
+function turnSuccess(key)
+  drawCutscene = true
+  local choose = math.floor(love.math.random(3))
+  --local choose = 2
+  
+  if choose == 1 then img = amazing
+  elseif choose == 2 then img = fedexcellent
+  else img = urock
   end
+
+  video:play()
+end
+
+function updateCutsceneVideo(dt)
+  cutsceneTimer = cutsceneTimer + dt
+end
+
+function playCutsceneVideo(dt)
+  love.graphics.draw(video, 0, 0)
+  
+  if cutsceneTimer > 4 then 
+    video:rewind()
+    drawCutscene = false
+    cutsceneTimer = 0
+  elseif cutsceneTimer > 1 then love.graphics.draw(img, 100, 100, 0, 0.7, 0.7) end
   
 end
+
+
+function love.keypressed(key, scancode, isrepeat)
+    -- this functionality only works when debugmode is set to true
+    if debugmode then
+      -- instantly trigger sharp turn screen
+      if key == 'r' then 
+        turnSuccess()
+      end
+      
+      -- instantly trigger game over screen
+      if key == 'o' then
+        endGame()
+      end
+    end
+    
+end
+
+function endGame()
+  love.audio.stop()
+  SSM.add("end")
+  SSM.purge("game")
+end
+
+
 
 return scene
