@@ -44,6 +44,7 @@ function drawWheel(fc, wc, angle)
   love.graphics.circle("fill", wheel_centre_width, wheel_centre_height, wheel_core_radius)
   drawStick(wheel_centre_width,wheel_centre_height,wheel_radius,wheel_core_radius,wc, angle)
   drawHorn(wheel_centre_width,wheel_centre_height, wheel_size )
+  drawScore();
 end
 
 function degree2Rad(degree)
@@ -93,4 +94,14 @@ function drawHorn(centreW, centreH, size)
   hornRad = size * 0.6 * 0.7
   love.graphics.setColor(0.6, 0.6, 0.8, 1);
   love.graphics.circle("fill", centreW, centreH, hornRad)
+end
+
+-- draw the score
+function drawScore()
+  totalScore = player.score + player.health
+  posX = width - 70
+  posY = 50
+  scoreText = "Score: %d"
+  love.graphics.setColor(0.5,0.7,0.1,1);
+  love.graphics.print(string.format(scoreText, totalScore), posX, posY)
 end

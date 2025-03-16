@@ -51,7 +51,7 @@ function love.load()
   
   
   -- SSM.add("game")
-  SSM.add("end")
+  SSM.add("game")
 end
 
 function love.update(dt)
