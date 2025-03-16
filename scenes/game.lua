@@ -9,7 +9,13 @@ roadSideLeft = math.pi - math.pi/3.41
 
 
 -- set speed movement
-speed = 1
+
+MAX_SPEED = 3
+DEFAULT_SPEED = 1
+speed = DEFAULT_SPEED
+wheel_angle = 0
+turningDirection = 0 -- -1 for left and 1 for right
+turnBack = false
 -- set lines
 line_width = 20
 line_height = 80
@@ -50,6 +56,22 @@ function scene.update(dt)
   else
     line_start = vanishing.y - line_height
   end
+  -- turn left or right of the wheel
+  if not turningDirection ~= 0 then
+    if not turnBack then
+      wheel_angle = wheel_angle + turningDirection
+      if wheel_angle * turningDirection >= 45 then 
+      turnBack = true
+      end
+    else
+      wheel_angle = wheel_angle - turningDirection
+      if wheel_angle * turningDirection <= 0 then
+        wheel_angle = 0
+        turnBack = false
+        turningDirection = 0
+      end
+    end
+  end
 --  b:update()
 end
 
@@ -70,7 +92,8 @@ function scene.draw()
   love.graphics.print(tostring(player.lane), 10, 30)
   
   -- draw truck console
-  player:draw()
+  
+  player:draw(wheel_angle)
 end
 
 
@@ -139,6 +162,7 @@ function love.keypressed(key, scancode, isrepeat)
     for _, e in pairs(enemies) do
      changeCentreX(e, 500)
     end
+    turningDirection = -1
 
 
   end
