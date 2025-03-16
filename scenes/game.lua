@@ -11,6 +11,7 @@ local vanishing = {x = width/2, y = 300}
 
 -- constant angles; use these angles for objects moving from the right or left
 roadSideRight = math.pi/3.41
+roadSideCentre = 0
 roadSideLeft = math.pi - math.pi/3.41
 
 -- sharpTurnAhead: false in normal mode and true for sharp turn button mashing
@@ -35,6 +36,8 @@ line_height = 80
 line_space = 40
 line_start = vanishing.y - line_height
 
+spawnChance = 9
+gameTime = 0
 function scene.load()
 local b = Building:new(vanishing.x + 250, vanishing.y, 0, roadSideRight)
 local b2 = Building:new(vanishing.x - 350, vanishing.y, 0, roadSideLeft)
@@ -45,7 +48,28 @@ local obstacle2 = Obstacle:new(vanishing.x - 250, vanishing.y, 0, roadSideLeft, 
 enemies = {obstacle1, obstacle2}
 end
 
+function spawnObs()
+  randomLane = math.random(0,2)
+  if randomLane == 0 then
+    local obstacleGen = Obstacle:new(vanishing.x + 100, vanishing.y, 0, roadSideRight, 0) 
+  elseif randomLane == 2 then
+    local obstacleGen = Obstacle:new(vanishing.x - 250, vanishing.y, 0, roadSideLeft, 2)
+  else
+    local obstacleGen = Obstacle:new(width/2, vanishing.y, 0, roadSideCentre, 1)
+  end
+table.insert(enemies, obstacleGen)
+end
+
 function scene.update(dt)
+
+  gameTime = gameTime + 1
+  if gameTime % 100 == 99 then
+    randomSpawn = math.random(0,9)
+    if randomSpawn < spawnChance then
+      spawnObs()
+    end
+  end
+
   updateGameAudio()
   
   for i, thing in pairs(decor) do

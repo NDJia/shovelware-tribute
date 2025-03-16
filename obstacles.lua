@@ -9,6 +9,11 @@ decor = {}
 -- Set speed of movement
 speed = 3
 
+-- load images
+barrier1 = love.graphics.newImage("assets/truck_barrier1.png")
+barrier2 = love.graphics.newImage("assets/truck_barrier2.png")
+pothole = love.graphics.newImage("assets/truck_pothole.png")
+obstacleImages = {barrier1, barrier2, pothole}
 -- OBSTACLE OBJECTS
 Obstacle = {}
 function Obstacle:new(x, y, dist, setAngle, setLane)
@@ -17,8 +22,9 @@ function Obstacle:new(x, y, dist, setAngle, setLane)
     centreY = y,
     r = dist,
     angle = setAngle,
-    lane = setLane
-  }
+    lane = setLane,
+    img = obstacleImages[math.random(1, 3)]
+    }
   
   self.__index = self
   
@@ -32,12 +38,9 @@ end
 function Obstacle:draw()
   love.graphics.push("all")
   local x, y = polarToPixel(self.centreX, self.centreY, self.r, self.angle)
-  
   love.graphics.setColor(1, 0, 0, 1)
-  love.graphics.rectangle("fill", x, y, 100, 100)
-  
+  love.graphics.draw(self.img, x, y)
   love.graphics.pop("all")
-  
 end
 
 function removeObstacle(i)
