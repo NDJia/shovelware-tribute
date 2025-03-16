@@ -49,8 +49,12 @@ function love.load()
     radiovoice[i] = love.audio.newSource("audio/rockradio"..i..".ogg", "stream")
   end
   
+  -- images
+  amazing = love.graphics.newImage("assets/truck_amazing.png")
+  fedexcellent = love.graphics.newImage("assets/truck_fedexcellent.png")
+  urock = love.graphics.newImage("assets/truck_urock.png")
   
-  SSM.add("turnCutscene")
+  SSM.add("game")
   --SSM.add("mainmenu")
 end
 

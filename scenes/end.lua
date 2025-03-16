@@ -8,9 +8,8 @@ function scene.load()
   youreWinner = love.graphics.newImage("assets/truck_yourewinner.png")
 end
 
-function scene.update(dt)
-  
-end
+-- nothing needs to be updated per-frame in the end screen
+function scene.update(dt) end
 
 function scene.draw()
   love.graphics.push("all")
@@ -18,14 +17,13 @@ function scene.draw()
   love.graphics.setColor(1, 1, 0, 1)
   love.graphics.rectangle("fill", 0, 0, width, height)
   
-  
   love.graphics.reset()
   love.graphics.draw(youreWinner, width/2 - 350, -50, 0, 1.2, 1.2)
   
   love.graphics.setColor(0, 0, 0, 1)
   love.graphics.setFont(bigfont)
   
-  love.graphics.print("Time: "..player.time, width/2 - 130, 400)
+  love.graphics.print(string.format("Time: %.2f", player.time), width/2 - 130, 400)
   love.graphics.print("Score: "..player.score, width/2 - 130, 440)
   love.graphics.print("Lives Left: "..player.health, width/2 - 150, 480)
   

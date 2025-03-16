@@ -16,8 +16,11 @@ local sharpTurnAhead = false
 local buttonPressesCount = 0
 local sharpTurnDir = 0 -- left is -1, right is 1
 local turnStartTime = 0 -- record the time that the turn started at
+
+local drawCutscene = false
+local cutsceneTimer = 0
 -- constants
-local TIME_FROM_TURN = 5 -- number of seconds the player has to make the turn
+local TIME_FOR_TURN = 5 -- number of seconds the player has to make the turn
 local NUM_BTN_PRESSES = 15 -- number of button presses that must be recorded
 
 -- flag for which audio is playing
@@ -47,10 +50,14 @@ function scene.load()
   
   gamebgm:play()
   gamebgm:setVolume(0.6)
+  
+  video = love.graphics.newVideo("assets/turn.ogv")
 end
 
 function scene.update(dt)
   updateGameAudio()
+  -- add to player timer
+  player.time = player.time + dt
   
   for i, thing in pairs(decor) do
    thing:update() 
@@ -91,7 +98,9 @@ function scene.update(dt)
       end
     end
   end
---  b:update()
+
+  if drawCutscene then updateCutsceneVideo(dt) end
+
 end
 
 function scene.draw()
@@ -113,6 +122,8 @@ function scene.draw()
   -- draw truck console
   
   player:draw(wheel_angle)
+  
+  if drawCutscene then playCutsceneVideo() end
 end
 
 
@@ -159,10 +170,13 @@ end
 
 -- input
 function love.keypressed(key, scancode, isrepeat)
-  if not sharpTurnAhead then changeLane(key) end
-  
+  if not sharpTurnAhead then changeLane(key)
+  else sharpTurn(key)
+  end
+
 end
 
+-- called in input function above to handle lane changing
 function changeLane(key)
   if key == "right" and vanishing.x > width/2 - 500 then
     vanishing.x = vanishing.x - 500
@@ -198,25 +212,32 @@ function sharpTurn(key)
   
 end
 
-
-
-
-function updateGameAudio()
-  if audioPlaying == 0 and not gamebgm:isPlaying() then
-    local choose = math.floor(love.math.random(4))
-    audioPlaying = choose
-    radiovoice[choose]:play()
+function turnSuccess(key)
+  drawCutscene = true
+  local choose = math.floor(love.math.random(3))
+  --local choose = 2
   
-  elseif audioPlaying ~= 0 and love.audio.getActiveSourceCount() < 1 then
-    audioPlaying = 0
-    gamebgm:play()
-    gamebgm:seek(love.math.random(20), "seconds")
+  if choose == 1 then img = amazing
+  elseif choose == 2 then img = fedexcellent
+  else img = urock
   end
-  
-  
+
+  video:play()
 end
 
-function queueRadioVoice(choose)
+function updateCutsceneVideo(dt)
+  cutsceneTimer = cutsceneTimer + dt
+end
+
+function playCutsceneVideo(dt)
+  love.graphics.draw(video, 0, 0)
+  
+  if cutsceneTimer > 4 then 
+    video:rewind()
+    drawCutscene = false
+    cutsceneTimer = 0
+  elseif cutsceneTimer > 1 then love.graphics.draw(img, 100, 100, 0, 0.7, 0.7) end
+  
 end
 
 
@@ -225,18 +246,23 @@ function love.keypressed(key, scancode, isrepeat)
     if debugmode then
       -- instantly trigger sharp turn screen
       if key == 'r' then 
-        SSM.add("turnCutscene")
-        SSM.setFrozen("game", true)
+        turnSuccess()
       end
       
       -- instantly trigger game over screen
       if key == 'o' then
-        SSM.add("end")
-        SSM.purge("game")
+        endGame()
       end
     end
     
 end
+
+function endGame()
+  love.audio.stop()
+  SSM.add("end")
+  SSM.purge("game")
+end
+
 
 
 return scene
