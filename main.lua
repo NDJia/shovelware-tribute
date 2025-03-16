@@ -40,6 +40,20 @@ function love.load()
   title = love.graphics.newFont("assets/NotoSans.ttf", 50)
   bigfont = love.graphics.newFont("assets/NotoSans.ttf", 40)
   smallfont = love.graphics.newFont("assets/NotoSans.ttf", 30)
+
+  -- set up images for use throughout the game
+  barrier1 = love.graphics.newImage("assets/truck_barrier1.png")
+  barrier2 = love.graphics.newImage("assets/truck_barrier2.png")
+  atari1 = love.graphics.newImage("assets/truck_atari1.png")
+  atari2 = love.graphics.newImage("assets/truck_atari2.png")
+  atari3 = love.graphics.newImage("assets/truck_atari3.png")
+  fedexcellent = love.graphics.newImage("assets/truck_fedexcellent.png")
+  garbage = love.graphics.newImage("assets/truck_garbage.png")
+  logo = love.graphics.newImage("assets/truck_logo.png")
+  pothole = love.graphics.newImage("assets/truck_pothole.png")
+  speedometer = love.graphics.newImage("assets/truck_speedometer.png")
+  urock = love.graphics.newImage("assets/truck_urock.png")
+  yourewinner = love.graphics.newImage("assets/truck_yourewinner.png")
   
   -- load audio
   titlesfx = love.audio.newSource("audio/menusfx.ogg", "stream")
