@@ -26,16 +26,32 @@ SSM.setPath("scenes/")
 -- require utility modules
 require "obstacles"
 require "player"
+require "sound"
 
 -- state tracking
 state = "menu"
 -- values: menu, game, turn (for cutscene), pause, end
 
 function love.load()
+  -- set width and height constants
   width, height = love.graphics.getDimensions()
   
+  -- set up fonts for use throughout the game
+  title = love.graphics.newFont("assets/NotoSans.ttf", 50)
+  bigfont = love.graphics.newFont("assets/NotoSans.ttf", 40)
+  smallfont = love.graphics.newFont("assets/NotoSans.ttf", 30)
+  
+  -- load audio
+  titlesfx = love.audio.newSource("audio/menusfx.ogg", "stream")
+  gamebgm = love.audio.newSource("audio/bgm.ogg", "stream")
+  radiovoice = {}
+  for i = 1, 4 do
+    radiovoice[i] = love.audio.newSource("audio/rockradio"..i..".ogg", "stream")
+  end
+  
+  
   -- SSM.add("game")
-  SSM.add("mainmenu")
+  SSM.add("end")
 end
 
 function love.update(dt)

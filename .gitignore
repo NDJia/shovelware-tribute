@@ -10,3 +10,6 @@ release/
 
 # ignoring editor configuration files
 .vscode/
+
+# ignoring backup files from branch merging
+**/*.orig

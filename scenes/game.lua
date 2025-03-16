@@ -1,5 +1,11 @@
 local scene = {}
 
+-- count the amount of time the player is in the scene
+local secondsPassed = 0
+
+-- count the score (number of cartridges picked up)
+-- local score = 0
+
 -- define the vanishing point, game objects are defined relative to these coordinates
 local vanishing = {x = width/2, y = 300}
 
@@ -7,9 +13,16 @@ local vanishing = {x = width/2, y = 300}
 roadSideRight = math.pi/3.41
 roadSideLeft = math.pi - math.pi/3.41
 
+-- sharpTurnAhead: false in normal mode and true for sharp turn button mashing
+local sharpTurnAhead = false
+local buttonPressesCount = 0
+local sharpTurnDir = 0 -- left is -1, right is 1
+local turnStartTime = 0 -- record the time that the turn started at
+-- constants
+local TIME_FROM_TURN = 5 -- number of seconds the player has to make the turn
+local NUM_BTN_PRESSES = 15 -- number of button presses that must be recorded
 
 -- set speed movement
-
 MAX_SPEED = 3
 DEFAULT_SPEED = 1
 speed = DEFAULT_SPEED
@@ -33,6 +46,8 @@ enemies = {obstacle1, obstacle2}
 end
 
 function scene.update(dt)
+  updateGameAudio()
+  
   for i, thing in pairs(decor) do
    thing:update() 
   end
@@ -140,6 +155,11 @@ end
 
 -- input
 function love.keypressed(key, scancode, isrepeat)
+  if not sharpTurnAhead then changeLane(key) end
+  
+end
+
+function changeLane(key)
   if key == "right" and vanishing.x > width/2 - 500 then
     vanishing.x = vanishing.x - 500
     player.lane = player.lane + 1
@@ -151,6 +171,8 @@ function love.keypressed(key, scancode, isrepeat)
     for _, e in pairs(enemies) do
      changeCentreX(e, -500)
     end
+    
+    turningDirection = 1
   elseif key == "left" and vanishing.x < width/2 + 500 then
     vanishing.x = vanishing.x + 500
     player.lane = player.lane -1
@@ -162,13 +184,25 @@ function love.keypressed(key, scancode, isrepeat)
     for _, e in pairs(enemies) do
      changeCentreX(e, 500)
     end
+    
     turningDirection = -1
-
-
   end
+
+end
+
+function sharpTurn(key)
+  
 end
 
 
 
+
+function updateGameAudio()
+  if love.audio.getActiveSourceCount() < 0 then
+    local choose = math.floor(love.math.random(4))
+    radiovoice[choose]:play()
+  end
+  
+end
 
 return scene

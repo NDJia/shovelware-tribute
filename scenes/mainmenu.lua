@@ -1,14 +1,14 @@
 local scene = {}
 
 local cursorSelect = 0 -- 0: Play 1: Credits 2: Quit
+local video = nil
+local logo = nil
 
 function scene.load()
-  title = love.graphics.newFont("assets/NotoSans.ttf", 50)
-  bigfont = love.graphics.newFont("assets/NotoSans.ttf", 40)
-  smallfont = love.graphics.newFont("assets/NotoSans.ttf", 30)
-  
   video = love.graphics.newVideo("assets/man-driving-automobile.ogv")
   video:play()
+  
+  logo = love.graphics.newImage("assets/truck_logo.png")
 end
 
 function scene.update(dt)
@@ -27,11 +27,11 @@ function scene.draw()
   love.graphics.push("all")
   
   -- title screen
-  love.graphics.setColor(1, 1, 1, 1)
-  love.graphics.rectangle("fill", width/5, 100, 3*width/5, 100)
-  love.graphics.setFont(title)
-  love.graphics.setColor(0, 0, 0, 1)
-  love.graphics.print("YORK TRUCK SIMULATOR", 1.5*width/5, 120)
+--  love.graphics.setColor(1, 1, 1, 1)
+--  love.graphics.rectangle("fill", width/5, 100, 3*width/5, 100)
+--  love.graphics.setFont(title)
+--  love.graphics.setColor(0, 0, 0, 1)
+  love.graphics.draw(logo, 50, 70, 0, 0.8, 0.8)
   
   love.graphics.translate(300, 0)
   -- play button

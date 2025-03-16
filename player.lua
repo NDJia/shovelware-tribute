@@ -2,7 +2,8 @@
 
 player = {
   health = 3,
-  lane = 1
+  lane = 1,
+  score = 0
 }
 
 --function player:update()
